@@ -238,9 +238,14 @@
                 const data = await response.json();
                 hideTypingIndicator();
                 if (data.status === 'success') {
-                    addMessage(data.message, 'assistant');
-                    // Enable submit button after the final confirmation (8 exchanges = 16 messages)
-                    if (messageCount >= 16) {
+                    const assistantMessage = data.message;
+                    addMessage(assistantMessage, 'assistant');
+                    
+                    // Check if this is the response after the final confirmation question
+                    if (assistantMessage.includes('anything else you') || 
+                        assistantMessage.includes('any additional comments') || 
+                        assistantMessage.includes('final confirmation') || 
+                        assistantMessage.toLowerCase().includes('check-in is complete')) {
                         conversationComplete = true;
                         document.getElementById('submitButton').disabled = false;
                     }
